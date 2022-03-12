@@ -1,0 +1,32 @@
+{
+  "name": "sgb-discount",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "pm2-runtime server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "cheerio": "^1.0.0-rc.10",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-static-gzip": "^2.1.5",
+    "express-xss-sanitizer": "^1.1.1",
+    "helmet": "^5.0.2",
+    "mongoose": "^6.2.5",
+    "morgan": "^1.10.0",
+    "node-cron": "^3.0.0",
+    "stock-nse-india": "^1.1.0",
+    "yahoo-finance": "^0.3.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15",
+    "pm2": "^5.2.0"
+  }
+}

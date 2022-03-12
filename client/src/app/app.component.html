@@ -1,0 +1,144 @@
+<mat-toolbar color="accent">
+  <span>SGB Discount Calculator</span>
+</mat-toolbar>
+
+<div class="class" fxLayout fxLayoutAlign="space-around center">
+  <mat-accordion class="info-card mat-elevation-z4">
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> Basic Info </mat-panel-title>
+        <mat-panel-description>
+          Data Updated Every hour. <br />
+          Last Updated
+          {{ data?.info?.lastUpdatedDate | date: "dd/MM/yyyy HH:mm:ss" }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <p>
+        <b class="margin-right-1">USDINR:</b>
+        <span class="font-size-1-3"
+          >{{ data?.info?.usdInrPrice | number: "1.2-2" }}
+        </span>
+      </p>
+      <p>
+        <b class="margin-right-1">Gold (in USD):</b
+        ><span class="font-size-1-3">
+          {{ data?.info?.goldPriceUsd | number: "1.2-2" }}</span
+        >
+      </p>
+      <p>
+        <b class="margin-right-1">Gold (in INR):</b
+        ><span class="font-size-1-3">
+          {{ data?.info?.goldPriceInr | number: "1.2-2" }}</span
+        >
+      </p>
+      <p>
+        <b class="margin-right-1">Discount Rate (Assumed):</b
+        ><span class="font-size-1-3">
+          {{ data?.info?.discountRate | number: "1.2-2" }}%
+        </span>
+      </p>
+    </mat-expansion-panel>
+  </mat-accordion>
+</div>
+
+<div class="sgb-table-div mat-elevation-z8">
+  <table
+    matTableResponsive
+    mat-table
+    [dataSource]="dataSource"
+    class="w-100"
+    matSort
+  >
+    <ng-container matColumnDef="symbol">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Symbol</th>
+      <td mat-cell *matCellDef="let element">
+        <b> {{ element.symbol }} </b>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="issuePrice">
+      <th mat-header-cell *matHeaderCellDef>Issue Price</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.issuePrice }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="maturityDate">
+      <th mat-header-cell *matHeaderCellDef>Maturity Date</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.maturityDate | date: "MMM yyyy" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="yearsToMaturity">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>
+        Years to Maturity
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.yearsToMaturity | number: "1.2-2" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="interestPayable">
+      <th mat-header-cell *matHeaderCellDef>Interest Rate</th>
+      <td mat-cell *matCellDef="let element">{{ element.interestPayable }}%</td>
+    </ng-container>
+
+    <ng-container matColumnDef="presentValueDividend">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>
+        Present Value of Dividend
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.presentValueDividend | number: "1.2-2" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fairValue">
+      <th mat-header-cell *matHeaderCellDef>Fair Value</th>
+      <td mat-cell *matCellDef="let element">
+        <b> {{ element.fairValue | number: "1.2-2" }}</b>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="lastPrice">
+      <th mat-header-cell *matHeaderCellDef>Current Price</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.lastPrice | number: "1.2-2" }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="discount">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>
+        Discount to Current Price
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <b> {{ element.discount | percent: "1.2-2" }} </b>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="yield">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>
+        Interest Rate Yield
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <b>{{ element.yield | number: "1.2-2" }}% </b>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
+  </table>
+
+  <mat-paginator
+    [pageSizeOptions]="[10, 20, 30]"
+    showFirstLastButtons
+    aria-label="Select page of sgb"
+  >
+  </mat-paginator>
+</div>
+
+<div class="footer">
+  <p>
+    Made with 💖 by <a href="https://twitter.com/mtwn105"> <b>Amit Wani</b></a>
+  </p>
+</div>

@@ -1,0 +1,35 @@
+.info-card {
+  margin-top: 1rem;
+  width: fit-content;
+}
+
+.mat-card-footer {
+  padding: 1rem;
+}
+
+.sgb-table-div {
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+
+  .mat-table {
+    width: 100%;
+    overflow: auto;
+  }
+}
+
+.footer {
+  height: 2rem;
+  padding: 1rem 0;
+  text-align: center;
+  background-color: #673ab7;
+  color: white;
+
+  a {
+    color: white;
+  }
+}
+
+.mobile-label {
+  display: none;
+}
