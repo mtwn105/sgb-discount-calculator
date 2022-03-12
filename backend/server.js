@@ -87,7 +87,7 @@ app.get("/api/sgbs", async (req, res) => {
 app.get("/api/sgbs/update", async (req, res) => {
   const result = await updateData();
   if (result) {
-    res.send({ info, data });
+    res.send(result);
   } else {
     res.status(500).send("Failed to update data");
   }

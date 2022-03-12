@@ -21,4 +21,8 @@ body {
   margin-right: 1rem;
 }
 
+.margin-1 {
+  margin: 1rem !important;
+}
+
 @import "./app/directives/mat-table-responsive.directive";
