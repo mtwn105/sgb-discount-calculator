@@ -1,0 +1,424 @@
+[{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a8d"
+  },
+  "symbol": "SGBAPR28I",
+  "maturityDate": {
+    "$date": "2028-03-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a8e"
+  },
+  "symbol": "SGBAUG24",
+  "maturityDate": {
+    "$date": "2024-07-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a8f"
+  },
+  "symbol": "SGBAUG27",
+  "maturityDate": {
+    "$date": "2027-07-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a90"
+  },
+  "symbol": "SGBAUG28V",
+  "maturityDate": {
+    "$date": "2028-07-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a91"
+  },
+  "symbol": "SGBAUG29V",
+  "maturityDate": {
+    "$date": "2029-07-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a92"
+  },
+  "symbol": "SGBD29VIII",
+  "maturityDate": {
+    "$date": "2029-11-30T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a93"
+  },
+  "symbol": "SGBDC27VII",
+  "maturityDate": {
+    "$date": "2027-11-30T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a94"
+  },
+  "symbol": "SGBFEB24",
+  "maturityDate": {
+    "$date": "2024-01-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a95"
+  },
+  "symbol": "SGBFEB28IX",
+  "maturityDate": {
+    "$date": "2028-01-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a96"
+  },
+  "symbol": "SGBFEB29XI",
+  "maturityDate": {
+    "$date": "2029-01-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a97"
+  },
+  "symbol": "SGBJ28VIII",
+  "maturityDate": {
+    "$date": "2027-12-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a98"
+  },
+  "symbol": "SGBJAN27",
+  "maturityDate": {
+    "$date": "2026-12-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a99"
+  },
+  "symbol": "SGBJAN29IX",
+  "maturityDate": {
+    "$date": "2028-12-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a9a"
+  },
+  "symbol": "SGBJAN29X",
+  "maturityDate": {
+    "$date": "2028-12-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a9b"
+  },
+  "symbol": "SGBJAN30IX",
+  "maturityDate": {
+    "$date": "2029-12-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a9c"
+  },
+  "symbol": "SGBJU29III",
+  "maturityDate": {
+    "$date": "2029-05-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a9d"
+  },
+  "symbol": "SGBJUL25",
+  "maturityDate": {
+    "$date": "2025-06-30T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a9e"
+  },
+  "symbol": "SGBJUL27",
+  "maturityDate": {
+    "$date": "2027-06-30T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95a9f"
+  },
+  "symbol": "SGBJUL28IV",
+  "maturityDate": {
+    "$date": "2028-06-30T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aa0"
+  },
+  "symbol": "SGBJUL29IV",
+  "maturityDate": {
+    "$date": "2029-06-30T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aa1"
+  },
+  "symbol": "SGBJUN28",
+  "maturityDate": {
+    "$date": "2028-05-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aa2"
+  },
+  "symbol": "SGBJUN29II",
+  "maturityDate": {
+    "$date": "2029-05-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aa3"
+  },
+  "symbol": "SGBMAR24",
+  "maturityDate": {
+    "$date": "2024-02-29T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aa4"
+  },
+  "symbol": "SGBMAR25",
+  "maturityDate": {
+    "$date": "2025-02-28T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aa5"
+  },
+  "symbol": "SGBMAR28X",
+  "maturityDate": {
+    "$date": "2028-02-29T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aa6"
+  },
+  "symbol": "SGBMAY25",
+  "maturityDate": {
+    "$date": "2025-04-30T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aa7"
+  },
+  "symbol": "SGBMAY26",
+  "maturityDate": {
+    "$date": "2026-04-30T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aa8"
+  },
+  "symbol": "SGBMAY28",
+  "maturityDate": {
+    "$date": "2028-04-30T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aa9"
+  },
+  "symbol": "SGBMAY29I",
+  "maturityDate": {
+    "$date": "2029-04-30T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aaa"
+  },
+  "symbol": "SGBMR29XII",
+  "maturityDate": {
+    "$date": "2029-02-28T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aab"
+  },
+  "symbol": "SGBN28VIII",
+  "maturityDate": {
+    "$date": "2028-10-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aac"
+  },
+  "symbol": "SGBNOV23",
+  "maturityDate": {
+    "$date": "2023-10-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aad"
+  },
+  "symbol": "SGBNOV24",
+  "maturityDate": {
+    "$date": "2024-10-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aae"
+  },
+  "symbol": "SGBNOV258",
+  "maturityDate": {
+    "$date": "2025-10-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aaf"
+  },
+  "symbol": "SGBNOV25IX",
+  "maturityDate": {
+    "$date": "2025-10-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95ab0"
+  },
+  "symbol": "SGBNOV26",
+  "maturityDate": {
+    "$date": "2026-10-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95ab1"
+  },
+  "symbol": "SGBNV29VII",
+  "maturityDate": {
+    "$date": "2029-10-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95ab2"
+  },
+  "symbol": "SGBOC28VII",
+  "maturityDate": {
+    "$date": "2028-09-30T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95ab3"
+  },
+  "symbol": "SGBOCT25",
+  "maturityDate": {
+    "$date": "2025-09-30T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95ab4"
+  },
+  "symbol": "SGBOCT25IV",
+  "maturityDate": {
+    "$date": "2025-09-30T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95ab5"
+  },
+  "symbol": "SGBOCT26",
+  "maturityDate": {
+    "$date": "2026-09-30T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95ab6"
+  },
+  "symbol": "SGBOCT27",
+  "maturityDate": {
+    "$date": "2027-09-30T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95ab7"
+  },
+  "symbol": "SGBOCT27VI",
+  "maturityDate": {
+    "$date": "2027-09-30T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95ab8"
+  },
+  "symbol": "SGBSEP24",
+  "maturityDate": {
+    "$date": "2024-08-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95ab9"
+  },
+  "symbol": "SGBSEP27",
+  "maturityDate": {
+    "$date": "2027-08-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95aba"
+  },
+  "symbol": "SGBSEP28VI",
+  "maturityDate": {
+    "$date": "2028-08-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+},{
+  "_id": {
+    "$oid": "622b7a923510270fe0e95abb"
+  },
+  "symbol": "SGBSEP29VI",
+  "maturityDate": {
+    "$date": "2029-08-31T18:30:00Z"
+  },
+  "interestPayable": 2.5
+}]

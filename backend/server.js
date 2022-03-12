@@ -26,8 +26,20 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(xss());
 app.use(cors());
-app.use(helmet());
 app.use(morgan("combined"));
+
+app.use(helmet.crossOriginOpenerPolicy({ policy: "same-origin-allow-popups" }));
+app.use(helmet.crossOriginResourcePolicy());
+app.use(helmet.noSniff());
+app.use(helmet.originAgentCluster());
+app.use(helmet.ieNoOpen());
+app.use(
+  helmet.frameguard({
+    action: "sameorigin",
+  })
+);
+app.use(helmet.hidePoweredBy());
+app.use(helmet.xssFilter());
 
 // Fetch data from NSE
 app.get("/api/nse/:symbol", async (req, res) => {
