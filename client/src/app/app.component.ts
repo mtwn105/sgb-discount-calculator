@@ -1,10 +1,12 @@
+import { GoogleAnalyticsService } from './services/google-analytics.service';
 import { SgbService } from './services/sgb.service';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { BreakpointObserver } from '@angular/cdk/layout';
-
+import { NavigationEnd, Router } from '@angular/router';
+declare let gtag: Function;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -25,14 +27,27 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
-
+    this.loadScript();
   }
 
   constructor(
     private sgbService: SgbService,
-    private breakpointObserver: BreakpointObserver
+    private router: Router,
+    private breakpointObserver: BreakpointObserver,
+    public googleAnalyticsService: GoogleAnalyticsService,
+    private cDRef: ChangeDetectorRef
   ) {
-    breakpointObserver.observe(['(max-width: 600px)']).subscribe(result => {
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        gtag('config', 'G-W6WBWZ85BG',
+          {
+            'page_path': event.urlAfterRedirects
+          }
+        );
+      }
+    });
+    breakpointObserver.observe(['(max-width: 768px)']).subscribe(result => {
       this.isMobile = !!result.matches;
     });
   }
@@ -44,7 +59,26 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.dataSource = new MatTableDataSource(this.data.data);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+
+      this.googleAnalyticsService.eventEmitter("dataLoaded", "data", "");
+
     })
+  }
+
+
+  public loadScript() {
+    this.cDRef.detectChanges();
+    console.log('preparing to load...')
+    let form = document.createElement('form');
+    let node = document.createElement('script');
+    node.src = 'https://checkout.razorpay.com/v1/payment-button.js';
+    node.setAttribute('data-payment_button_id', "pl_J64Ru9LDwkeZDD");
+    node.async = true;
+    form.appendChild(node);
+
+    document.getElementsByClassName('payment')[0].appendChild(form);
+
+
   }
 
 }

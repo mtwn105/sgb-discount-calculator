@@ -1,5 +1,11 @@
 <mat-toolbar color="accent">
+  <img
+    src="../assets/android-chrome-512x512.png"
+    alt="SGB Discount Calculator"
+  />
   <span>SGB Discount Calculator</span>
+  <div class="spacer"></div>
+  <div *ngIf="!isMobile" class="payment"></div>
 </mat-toolbar>
 
 <div class="class" fxLayout fxLayoutAlign="space-around center">
@@ -37,6 +43,8 @@
           {{ data?.info?.discountRate | number: "1.2-2" }}%
         </span>
       </p>
+
+      <div *ngIf="isMobile" class="payment"></div>
     </mat-expansion-panel>
   </mat-accordion>
 </div>
@@ -48,6 +56,9 @@
     [dataSource]="dataSource"
     class="w-100"
     matSort
+    (matSortChange)="
+      googleAnalyticsService.eventEmitter('sortedData', 'interaction', '')
+    "
   >
     <ng-container matColumnDef="symbol">
       <th mat-header-cell mat-sort-header *matHeaderCellDef>Symbol</th>
@@ -133,12 +144,23 @@
     [pageSizeOptions]="[10, 20, 30]"
     showFirstLastButtons
     aria-label="Select page of sgb"
+    (page)="
+      googleAnalyticsService.eventEmitter('pagination', 'interaction', '')
+    "
   >
   </mat-paginator>
 </div>
 
 <div class="footer">
   <p>
-    Made with 💖 by <a href="https://twitter.com/mtwn105"> <b>Amit Wani</b></a>
+    Made with 💖 by
+    <a
+      (click)="
+        googleAnalyticsService.eventEmitter('developername', 'interaction', '')
+      "
+      href="https://twitter.com/mtwn105"
+    >
+      <b>Amit Wani</b></a
+    >
   </p>
 </div>
