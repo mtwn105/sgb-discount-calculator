@@ -157,7 +157,7 @@ updateData = async () => {
       info.goldPriceUsd = goldPrice;
       info.goldPriceInr = (goldPrice * usdInrPrice * 1.1) / 31.1035;
       info.usdInrPrice = usdInrPrice;
-      info.lastUpdatedDate = Date.now;
+      info.lastUpdatedDate = new Date();
     }
 
     const data = await Promise.all(
