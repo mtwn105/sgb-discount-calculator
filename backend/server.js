@@ -85,7 +85,7 @@ app.get("/api/sgbs", async (req, res) => {
 
 // Update Data for SGBs
 app.get("/api/sgbs/update", async (req, res) => {
-  const result = await updateDate();
+  const result = await updateData();
   if (result) {
     res.send({ info, data });
   } else {
