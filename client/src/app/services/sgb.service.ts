@@ -16,4 +16,9 @@ export class SgbService {
     return this.http.get(environment.apiUrl + '/sgbs');
   }
 
+  // Get SGB data in csv
+  getSgbDataCsv() {
+    return this.http.get(environment.apiUrl + '/sgbs/csv');
+  }
+
 }

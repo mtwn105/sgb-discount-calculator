@@ -79,21 +79,69 @@ app.get("/api/sgbs/csv", async (req, res) => {
   let data = getSgbData(sgbs, info);
 
   const fields = [
-    "symbol",
-    "isin",
-    "issuePrice",
-    "yearsToMaturity",
-    "interestPayable",
-    "presentValueDividend",
-    "fairValue",
-    "askPrice",
-    "tradedVolumeValue",
-    "discount",
-    "discountCmp",
-    "yield",
+    {
+      label: "Symbol",
+      value: "symbol",
+    },
+    {
+      label: "ISIN",
+      value: "isin",
+    },
+    {
+      label: "Issue Price",
+      value: "issuePrice",
+    },
+    {
+      label: "Maturity Date",
+      value: "maturityDateString",
+    },
+    {
+      label: "Years To Maturity",
+      value: "yearsToMaturity",
+    },
+    {
+      label: "Interest Date 1",
+      value: "interestDate1String",
+    },
+    {
+      label: "Interest Date 2",
+      value: "interestDate2String",
+    },
+    {
+      label: "Interest Payable",
+      value: "interestPayable",
+    },
+    {
+      label: "Interest Value",
+      value: "interestValue",
+    },
+    {
+      label: "Total Remaining Interest",
+      value: "totalRemainingInterest",
+    },
+    {
+      label: "Present Value of Future Interest Payments",
+      value: "presentValueDividend",
+    },
+    {
+      label: "Fair Value",
+      value: "fairValue",
+    },
+    {
+      label: "Discount to Fair Value",
+      value: "discount",
+    },
+    {
+      label: "Discount to Gold Price",
+      value: "discountCmp",
+    },
+    {
+      label: "Total Yield to Maturity",
+      value: "yield",
+    },
   ];
 
-  const opts = { fields, header: false };
+  const opts = { fields };
 
   try {
     // Generate file name as sgbs_YYYY-MM-DD.csv
@@ -103,10 +151,6 @@ app.get("/api/sgbs/csv", async (req, res) => {
     }-${date.getDate()}.csv`;
 
     let csv = parse(data, opts);
-
-    csv =
-      '"Symbol","ISIN","Issue Price","Years To Maturity","Interest Payable","Present Value Dividend","Fair Value","Ask Price","Traded Volume Value","Discount to Fair Value","Discount to Current Gold Price","Yield"\n' +
-      csv;
 
     res.setHeader("Content-Type", "text/csv");
     res.setHeader("Content-Disposition", "attachment; filename=" + fileName);
@@ -232,7 +276,7 @@ updateData = async () => {
           }
         } catch (error) {
           console.error("Error while fetching data for SGB", sgb);
-          console.log(error);
+          console.error(error);
           return null;
         }
       })
@@ -279,6 +323,46 @@ getSgbData = (sgbs, info) => {
 
     const fairValue = presentValueDividend + info[0].goldPriceInr;
 
+    const totalRemainingInterest =
+      (sgb.issuePrice * sgb.interestPayable * sgb.yearsToMaturity) / 100;
+
+    // Format maturity date to string mm/dd/yyyy in IST time zone
+    const maturityDateString = sgb.maturityDate.toLocaleDateString("en-US", {
+      timeZone: "Asia/Kolkata",
+    });
+
+    const interestDate1String =
+      sgb.interestDate1
+        .toLocaleString("en-US", {
+          timeZone: "Asia/Kolkata",
+          month: "long",
+          day: "numeric",
+        })
+        .split(" ")[0] +
+      sgb.interestDate1
+        .toLocaleString("en-US", {
+          timeZone: "Asia/Kolkata",
+          month: "long",
+          day: "numeric",
+        })
+        .split(" ")[1];
+
+    const interestDate2String =
+      sgb.interestDate2
+        .toLocaleString("en-US", {
+          timeZone: "Asia/Kolkata",
+          month: "long",
+          day: "numeric",
+        })
+        .split(" ")[0] +
+      sgb.interestDate2
+        .toLocaleString("en-US", {
+          timeZone: "Asia/Kolkata",
+          month: "long",
+          day: "numeric",
+        })
+        .split(" ")[1];
+
     let sgbData = {
       symbol: sgb.symbol,
       isin: sgb.isin,
@@ -288,13 +372,21 @@ getSgbData = (sgbs, info) => {
       maturityDate: sgb.maturityDate,
       interestDate1: sgb.interestDate1,
       interestDate2: sgb.interestDate2,
+      maturityDateString,
+      interestDate1String,
+      interestDate2String,
       yearsToMaturity: sgb.yearsToMaturity,
       interestPayable: sgb.interestPayable,
+      interestValue: (sgb.issuePrice * sgb.interestPayable) / 100,
+      totalRemainingInterest,
       presentValueDividend: presentValueDividend,
       fairValue: fairValue,
-      discount: fairValue / sgb.askPrice - 1,
-      discountCmp: info[0].goldPriceInr / sgb.askPrice - 1,
-      yield: (sgb.issuePrice * sgb.interestPayable) / sgb.askPrice,
+      discount: (fairValue - sgb.askPrice) / fairValue,
+      discountCmp: (info[0].goldPriceInr - sgb.askPrice) / info[0].goldPriceInr,
+      yield:
+        ((totalRemainingInterest + info[0].goldPriceInr) / sgb.askPrice) **
+          (1 / sgb.yearsToMaturity) -
+        1,
     };
 
     data.push(sgbData);

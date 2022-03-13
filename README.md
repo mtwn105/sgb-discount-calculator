@@ -1,4 +1,4 @@
-# SGB Discount Calculator
+# SGB Analyzer
 
 ## [Link](https://sgb.amitwani.dev)
 
@@ -8,7 +8,7 @@
 
 ## Definitions
 
-**Present value of future dividends** is calculated using the discount/inflation rate (assumed 6%). 
+**Present value of future dividends** is calculated using the discount/inflation rate (assumed 6%).
 
 **Fair value** is calculated based on Present value of future dividends along with current Gold price in rupee terms.
 

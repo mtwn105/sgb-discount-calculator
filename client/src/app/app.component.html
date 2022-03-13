@@ -1,9 +1,6 @@
 <mat-toolbar color="accent">
-  <img
-    src="../assets/android-chrome-512x512.png"
-    alt="SGB Discount Calculator"
-  />
-  <span>SGB Discount Calculator</span>
+  <img src="../assets/android-chrome-512x512.png" alt="SGB Analyzer" />
+  <span>SGB Analyzer</span>
   <div class="spacer"></div>
   <div *ngIf="!isMobile" class="payment"></div>
 </mat-toolbar>
@@ -19,18 +16,6 @@
           {{ data?.info?.lastUpdatedDate | date: "dd/MM/yyyy HH:mm:ss" }}
         </mat-panel-description>
       </mat-expansion-panel-header>
-      <p>
-        <b class="margin-right-1">USDINR:</b>
-        <span class="font-size-1-3"
-          >{{ data?.info?.usdInrPrice | number: "1.2-2" }}
-        </span>
-      </p>
-      <p>
-        <b class="margin-right-1">Gold (in USD):</b
-        ><span class="font-size-1-3">
-          {{ data?.info?.goldPriceUsd | number: "1.2-2" }}</span
-        >
-      </p>
       <p>
         <b class="margin-right-1">Gold (in INR):</b
         ><span class="font-size-1-3">
@@ -49,15 +34,46 @@
   </mat-accordion>
 </div>
 
-<p class="margin-1">
-  <mat-icon color="primary">info</mat-icon> Read more about this tool by
-  clicking
-  <a
-    href="https://blog.amitwani.dev/sgb-discount-calculator-buy-gold-at-a-30-discount"
-    target="_blank"
-    >here</a
-  >
-</p>
+<div
+  class="row margin-left-1 margin-top-1 margin-right-1"
+  fxLayout
+  fxLayoutAlign="space-between center"
+>
+  <div class="col">
+    <mat-form-field appearance="outline">
+      <mat-label>Filter</mat-label>
+      <input
+        [(ngModel)]="filterText"
+        name="filterText"
+        (input)="filter($event)"
+        matInput
+        placeholder="Filter SGBs"
+      />
+    </mat-form-field>
+  </div>
+
+  <div class="col">
+    <mat-slide-toggle (change)="toggleLiquidity($event)" color="primary"
+      >Liquid SGBs</mat-slide-toggle
+    >
+  </div>
+</div>
+
+<p class="margin-left-1">{{ dataSource?.filteredData?.length }} SGBs found</p>
+
+<div
+  class="row margin-left-1 margin-right-1"
+  fxLayout
+  fxLayoutAlign="space-between center"
+>
+  <p class="no-margin">
+    <mat-icon color="primary">info</mat-icon> Download CSV for more details.
+  </p>
+  <button (click)="downloadCsv()" mat-raised-button color="accent">
+    <mat-icon>download</mat-icon>
+    <ng-container *ngIf="!isMobile"> Download CSV </ng-container>
+  </button>
+</div>
 
 <div class="sgb-table-div mat-elevation-z8">
   <table
@@ -73,19 +89,29 @@
     <ng-container matColumnDef="symbol">
       <th mat-header-cell mat-sort-header *matHeaderCellDef>Symbol</th>
       <td mat-cell *matCellDef="let element">
-        <b> {{ element.symbol }} </b>
+        <b>
+          <a
+            class="sgb-link"
+            href="https://www.nseindia.com/get-quotes/equity?symbol={{
+              element.symbol
+            }}"
+            target="_blank"
+          >
+            {{ element.symbol }}</a
+          >
+        </b>
       </td>
     </ng-container>
 
     <ng-container matColumnDef="issuePrice">
-      <th mat-header-cell *matHeaderCellDef>Issue Price</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Issue Price</th>
       <td mat-cell *matCellDef="let element">
         {{ element.issuePrice }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="maturityDate">
-      <th mat-header-cell *matHeaderCellDef>Maturity Date</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Maturity Date</th>
       <td mat-cell *matCellDef="let element">
         {{ element.maturityDate | date: "MMM yyyy" }}
       </td>
@@ -101,13 +127,13 @@
     </ng-container>
 
     <ng-container matColumnDef="interestPayable">
-      <th mat-header-cell *matHeaderCellDef>Interest Rate</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Interest Rate</th>
       <td mat-cell *matCellDef="let element">{{ element.interestPayable }}%</td>
     </ng-container>
 
     <ng-container matColumnDef="presentValueDividend">
       <th mat-header-cell mat-sort-header *matHeaderCellDef>
-        Present Value of Dividend
+        Present Value of Future Interest Payments
       </th>
       <td mat-cell *matCellDef="let element">
         {{ element.presentValueDividend | number: "1.2-2" }}
@@ -115,34 +141,52 @@
     </ng-container>
 
     <ng-container matColumnDef="fairValue">
-      <th mat-header-cell *matHeaderCellDef>Fair Value</th>
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Fair Value</th>
       <td mat-cell *matCellDef="let element">
         <b> {{ element.fairValue | number: "1.2-2" }}</b>
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="lastPrice">
-      <th mat-header-cell *matHeaderCellDef>Current Price</th>
+    <ng-container matColumnDef="askPrice">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>Ask Price</th>
       <td mat-cell *matCellDef="let element">
-        {{ element.lastPrice | number: "1.2-2" }}
+        <b> {{ element.askPrice | number: "1.2-2" }}</b>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tradedVolumeValue">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>
+        Traded Volume Value (in lakhs)
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.tradedVolumeValue | number: "1.2-2" }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="discount">
       <th mat-header-cell mat-sort-header *matHeaderCellDef>
-        Discount to Current Price
+        Discount to Fair Value
       </th>
       <td mat-cell *matCellDef="let element">
         <b> {{ element.discount | percent: "1.2-2" }} </b>
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="yield">
+    <ng-container matColumnDef="discountCmp">
       <th mat-header-cell mat-sort-header *matHeaderCellDef>
-        Interest Rate Yield
+        Discount to Gold Price
       </th>
       <td mat-cell *matCellDef="let element">
-        <b>{{ element.yield | number: "1.2-2" }}% </b>
+        <b> {{ element.discountCmp | percent: "1.2-2" }} </b>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="yield">
+      <th mat-header-cell mat-sort-header *matHeaderCellDef>
+        Total Yield to Maturity
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <b>{{ element.yield | percent: "1.2-2" }} </b>
       </td>
     </ng-container>
 
@@ -160,6 +204,48 @@
   >
   </mat-paginator>
 </div>
+
+<p class="margin-left-1">
+  <mat-icon color="primary">info</mat-icon> Read more about this tool by
+  clicking
+  <a
+    href="https://blog.amitwani.dev/sgb-discount-calculator-buy-gold-at-a-30-discount"
+    target="_blank"
+    >here</a
+  >
+</p>
+
+<p class="margin-left-1">
+  <mat-icon color="primary">info</mat-icon> This tool doesn't considers income
+  tax implications on the Interest earned. The Capital Gains availed at maturity
+  are exempted.
+</p>
+<p class="margin-left-1">
+  <mat-icon color="primary">info</mat-icon> Discount calculation doesn't
+  considers or predicts future appreciation in Gold Price. This discount will be
+  additional return on top of price appreciation of Gold until the maturity.
+</p>
+<p class="margin-left-1">
+  <mat-icon color="primary">info</mat-icon> Total Yield to Maturity is the
+  approximate yield per year one will get, if one buys Gold at the current price
+  and holds till the maturity assuming Gold price doesn't appreciate.
+</p>
+<p class="margin-left-1">
+  <mat-icon color="primary">info</mat-icon> Liquidity filter is based on at
+  least Rs. 10 lakh as traded volume value.
+</p>
+<p class="margin-left-1">
+  <mat-icon color="primary">info</mat-icon> List of SGBs will be updated every
+  week
+</p>
+<p class="margin-left-1">
+  <mat-icon color="primary">info</mat-icon> Gold price is fetched from
+  <a href="https://ibjarates.com" target="_blank">https://ibjarates.com</a>
+</p>
+
+<p class="margin-left-1">
+  <mat-icon color="primary">info</mat-icon> SGB prices are fetched from NSE.
+</p>
 
 <div class="footer">
   <p>

@@ -15,9 +15,10 @@ declare let gtag: Function;
 export class AppComponent implements OnInit, AfterViewInit {
 
   data: any;
+  filterText = "";
 
   dataSource = new MatTableDataSource();
-  displayColumns = ["symbol", "issuePrice", "maturityDate", "yearsToMaturity", "interestPayable", "presentValueDividend", "fairValue", "lastPrice", "discount", "yield"]
+  displayColumns = ["symbol", "issuePrice", "maturityDate", "yearsToMaturity", "interestPayable", "presentValueDividend", "fairValue", "askPrice", "tradedVolumeValue", "discount", "discountCmp", "yield"]
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -65,6 +66,43 @@ export class AppComponent implements OnInit, AfterViewInit {
     })
   }
 
+  filter(event: any) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  toggleLiquidity(event: any) {
+    if (event.checked) {
+
+      const liquidSgb = this.data.data.filter((sgb: any) => sgb.tradedVolumeValue > 10);
+
+      this.dataSource = new MatTableDataSource(liquidSgb);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.dataSource.filter = this.filterText.trim().toLowerCase();
+    } else {
+      this.dataSource = new MatTableDataSource(this.data.data);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.dataSource.filter = this.filterText.trim().toLowerCase();
+    }
+  }
+
+  downloadCsv() {
+    this.sgbService.getSgbDataCsv().subscribe((data: any) => {
+
+      // File name will be sgb_YYYY-MM-DD.csv
+      const fileName = `sgb_${new Date().toISOString().split('T')[0]}.csv`;
+
+      const blob = new Blob([data], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+    })
+  }
 
   public loadScript() {
     this.cDRef.detectChanges();
@@ -77,7 +115,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     form.appendChild(node);
 
     document.getElementsByClassName('payment')[0].appendChild(form);
-
 
   }
 
