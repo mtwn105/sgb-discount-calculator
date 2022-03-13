@@ -6,6 +6,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { NavigationEnd, Router } from '@angular/router';
+import { formatNumber } from '@angular/common';
 declare let gtag: Function;
 @Component({
   selector: 'app-root',
@@ -67,11 +68,15 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   filter(event: any) {
+    this.googleAnalyticsService.eventEmitter("filterData", "interaction", "");
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   toggleLiquidity(event: any) {
+
+    this.googleAnalyticsService.eventEmitter("toggleLiquidity", "interaction", "");
+
     if (event.checked) {
 
       const liquidSgb = this.data.data.filter((sgb: any) => sgb.tradedVolumeValue > 10);
@@ -90,7 +95,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   downloadCsv() {
     this.sgbService.getSgbDataCsv().subscribe((data: any) => {
-
+      this.googleAnalyticsService.eventEmitter("downloadCsv", "interaction", "");
       // File name will be sgb_YYYY-MM-DD.csv
       const fileName = `sgb_${new Date().toISOString().split('T')[0]}.csv`;
 
@@ -113,6 +118,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     node.setAttribute('data-payment_button_id', "pl_J64Ru9LDwkeZDD");
     node.async = true;
     form.appendChild(node);
+    form.addEventListener("click", () => {
+      this.googleAnalyticsService.eventEmitter("paymentButtonClick", "interaction", "");
+    })
 
     document.getElementsByClassName('payment')[0].appendChild(form);
 

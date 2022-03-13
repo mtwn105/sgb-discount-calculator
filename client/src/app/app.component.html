@@ -41,7 +41,7 @@
 >
   <div class="col">
     <mat-form-field appearance="outline">
-      <mat-label>Filter</mat-label>
+      <mat-label>Filter SGBs</mat-label>
       <input
         [(ngModel)]="filterText"
         name="filterText"
@@ -96,6 +96,13 @@
               element.symbol
             }}"
             target="_blank"
+            (click)="
+              googleAnalyticsService.eventEmitter(
+                'symbolLinkClick',
+                'interaction',
+                ''
+              )
+            "
           >
             {{ element.symbol }}</a
           >
@@ -209,6 +216,9 @@
   <mat-icon color="primary">info</mat-icon> Read more about this tool by
   clicking
   <a
+    (click)="
+      googleAnalyticsService.eventEmitter('blogLinkClick', 'interaction', '')
+    "
     href="https://blog.amitwani.dev/sgb-discount-calculator-buy-gold-at-a-30-discount"
     target="_blank"
     >here</a
@@ -240,7 +250,14 @@
 </p>
 <p class="margin-left-1">
   <mat-icon color="primary">info</mat-icon> Gold price is fetched from
-  <a href="https://ibjarates.com" target="_blank">https://ibjarates.com</a>
+  <a
+    (click)="
+      googleAnalyticsService.eventEmitter('ibjaLinkClick', 'interaction', '')
+    "
+    href="https://ibjarates.com"
+    target="_blank"
+    >https://ibjarates.com</a
+  >
 </p>
 
 <p class="margin-left-1">
