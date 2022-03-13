@@ -3,9 +3,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const axios = require("axios").default;
-const { NseIndia } = require("stock-nse-india");
 const connectDB = require("./db");
-const yahooFinance = require("yahoo-finance");
 const expressStaticGzip = require("express-static-gzip");
 const { xss } = require("express-xss-sanitizer");
 const cron = require("node-cron");
@@ -15,10 +13,7 @@ const cheerio = require("cheerio");
 
 const { Sgb, Info } = require("./schemas");
 
-const nseIndia = new NseIndia();
-
 const NSEAPI = API.NSE;
-const BSEAPI = API.BSE;
 
 require("dotenv").config();
 
