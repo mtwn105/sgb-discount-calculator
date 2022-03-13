@@ -10,6 +10,8 @@ const expressStaticGzip = require("express-static-gzip");
 const { xss } = require("express-xss-sanitizer");
 const cron = require("node-cron");
 const API = require("indian-stock-exchange");
+const { parse } = require("json2csv");
+const cheerio = require("cheerio");
 
 const { Sgb, Info } = require("./schemas");
 
@@ -64,35 +66,55 @@ app.get("/api/sgbs", async (req, res) => {
 
   const info = await Info.find();
 
-  let data = [];
+  let data = getSgbData(sgbs, info);
 
-  for (const sgb of sgbs) {
-    const c = (sgb.issuePrice * sgb.interestPayable) / 200;
-    const i = info[0].discountRate / 200;
-    const n = sgb.yearsToMaturity * 2;
-
-    const presentValueDividend = ((c * (1 - (1 + i) ** -n)) / i) * (1 + i);
-
-    const fairValue = presentValueDividend + info[0].goldPriceInr;
-
-    let sgbData = {
-      symbol: sgb.symbol,
-      isin: sgb.isin,
-      issuePrice: sgb.issuePrice,
-      askPrice: sgb.askPrice,
-      maturityDate: sgb.maturityDate,
-      yearsToMaturity: sgb.yearsToMaturity,
-      interestPayable: sgb.interestPayable,
-      presentValueDividend: presentValueDividend,
-      fairValue: fairValue,
-      discount: fairValue / sgb.askPrice - 1,
-      discountCmp: info[0].goldPriceInr / sgb.askPrice - 1,
-      yield: (sgb.issuePrice * sgb.interestPayable) / sgb.askPrice,
-    };
-
-    data.push(sgbData);
-  }
   res.send({ data, info: info[0] });
+});
+
+app.get("/api/sgbs/csv", async (req, res) => {
+  const sgbs = await Sgb.find();
+
+  const info = await Info.find();
+
+  let data = getSgbData(sgbs, info);
+
+  const fields = [
+    "symbol",
+    "isin",
+    "issuePrice",
+    "yearsToMaturity",
+    "interestPayable",
+    "presentValueDividend",
+    "fairValue",
+    "askPrice",
+    "tradedVolumeValue",
+    "discount",
+    "discountCmp",
+    "yield",
+  ];
+
+  const opts = { fields, header: false };
+
+  try {
+    // Generate file name as sgbs_YYYY-MM-DD.csv
+    const date = new Date();
+    const fileName = `sgbs_${date.getFullYear()}-${
+      date.getMonth() + 1
+    }-${date.getDate()}.csv`;
+
+    let csv = parse(data, opts);
+
+    csv =
+      '"Symbol","ISIN","Issue Price","Years To Maturity","Interest Payable","Present Value Dividend","Fair Value","Ask Price","Traded Volume Value","Discount to Fair Value","Discount to Current Gold Price","Yield"\n' +
+      csv;
+
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", "attachment; filename=" + fileName);
+    res.status(200).send(csv);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
 });
 
 // Update Data for SGBs
@@ -141,34 +163,26 @@ updateData = async () => {
   try {
     const sgbs = await Sgb.find();
 
-    // Get gold price
-    const gold = await yahooFinance.quote({
-      symbol: "GC=F",
-      modules: ["price"],
-    });
-    const usdInr = await yahooFinance.quote({
-      symbol: "INR=X",
-      modules: ["price"],
-    });
+    // Fetch gold price from https://ibjarates.com/
+    const { data: ibjaRatesPage } = await axios.get("https://ibjarates.com");
 
-    const goldPrice = gold.price.regularMarketPrice;
-    const usdInrPrice = usdInr.price.regularMarketPrice;
+    const $ = cheerio.load(ibjaRatesPage);
 
-    console.log({ goldPrice, usdInrPrice });
+    const goldPriceText = $("#lblrate24K").text();
+
+    const goldPriceInr = parseFloat(goldPriceText.replace(/,/g, ""));
+
+    console.log({ goldPriceInr });
 
     let info = await Info.findOne();
 
     // If no info found, create one
     if (!info) {
       info = {
-        goldPriceUsd: goldPrice,
-        goldPriceInr: (goldPrice * usdInrPrice * 1.1) / 31.1035,
-        usdInrPrice,
+        goldPriceInr,
       };
     } else {
-      info.goldPriceUsd = goldPrice;
-      info.goldPriceInr = (goldPrice * usdInrPrice * 1.1) / 31.1035;
-      info.usdInrPrice = usdInrPrice;
+      info.goldPriceInr = goldPriceInr;
       info.lastUpdatedDate = new Date();
     }
 
@@ -252,3 +266,36 @@ cron.schedule(
     timezone: "Asia/Kolkata",
   }
 );
+
+getSgbData = (sgbs, info) => {
+  let data = [];
+
+  for (const sgb of sgbs) {
+    const c = (sgb.issuePrice * sgb.interestPayable) / 200;
+    const i = info[0].discountRate / 200;
+    const n = sgb.yearsToMaturity * 2;
+
+    const presentValueDividend = ((c * (1 - (1 + i) ** -n)) / i) * (1 + i);
+
+    const fairValue = presentValueDividend + info[0].goldPriceInr;
+
+    let sgbData = {
+      symbol: sgb.symbol,
+      isin: sgb.isin,
+      issuePrice: sgb.issuePrice,
+      askPrice: sgb.askPrice,
+      tradedVolumeValue: sgb.tradedVolumeValue,
+      maturityDate: sgb.maturityDate,
+      yearsToMaturity: sgb.yearsToMaturity,
+      interestPayable: sgb.interestPayable,
+      presentValueDividend: presentValueDividend,
+      fairValue: fairValue,
+      discount: fairValue / sgb.askPrice - 1,
+      discountCmp: info[0].goldPriceInr / sgb.askPrice - 1,
+      yield: (sgb.issuePrice * sgb.interestPayable) / sgb.askPrice,
+    };
+
+    data.push(sgbData);
+  }
+  return data;
+};

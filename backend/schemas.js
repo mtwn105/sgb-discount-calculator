@@ -17,8 +17,6 @@ const Sgb = mongoose.model("Sgb", sgb, "sgbs");
 
 // Info Schema
 const info = new Schema({
-  usdInrPrice: { type: Number },
-  goldPriceUsd: { type: Number },
   goldPriceInr: { type: Number },
   discountRate: { type: Number, default: 6 },
   lastUpdatedDate: { type: Date, default: Date.now },
