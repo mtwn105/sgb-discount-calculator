@@ -312,14 +312,14 @@ getSgbData = (sgbs, info) => {
   for (const sgb of sgbs) {
     const c = (sgb.issuePrice * sgb.interestPayable) / 200;
     const i = info[0].discountRate / 200;
-    const n = sgb.yearsToMaturity * 2;
+    const n = Math.round(sgb.yearsToMaturity) * 2;
 
     const presentValueDividend = ((c * (1 - (1 + i) ** -n)) / i) * (1 + i);
 
     const fairValue = presentValueDividend + info[0].goldPriceInr;
 
     const totalRemainingInterest =
-      (sgb.issuePrice * sgb.interestPayable * sgb.yearsToMaturity) / 100;
+      (sgb.issuePrice * sgb.interestPayable * n) / 100;
 
     // Format maturity date to string mm/dd/yyyy in IST time zone
     const maturityDateString = sgb.maturityDate.toLocaleDateString("en-US", {
