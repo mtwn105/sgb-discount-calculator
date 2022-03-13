@@ -9,10 +9,14 @@ const yahooFinance = require("yahoo-finance");
 const expressStaticGzip = require("express-static-gzip");
 const { xss } = require("express-xss-sanitizer");
 const cron = require("node-cron");
+const API = require("indian-stock-exchange");
 
 const { Sgb, Info } = require("./schemas");
 
 const nseIndia = new NseIndia();
+
+const NSEAPI = API.NSE;
+const BSEAPI = API.BSE;
 
 require("dotenv").config();
 
@@ -44,8 +48,14 @@ app.use(helmet.xssFilter());
 // Fetch data from NSE
 app.get("/api/nse/:symbol", async (req, res) => {
   const { symbol } = req.params;
-  const data = await nseIndia.getEquityDetails(symbol);
-  res.send(data);
+  // const data = await nseIndia.getEquityDetails(symbol);
+
+  const data = await NSEAPI.getQuoteInfo(symbol);
+
+  console.log(data.data);
+
+  res.send(data.data);
+  // res.send("OK");
 });
 
 // Fetch data from MongoDB for SGB
@@ -67,15 +77,17 @@ app.get("/api/sgbs", async (req, res) => {
 
     let sgbData = {
       symbol: sgb.symbol,
+      isin: sgb.isin,
       issuePrice: sgb.issuePrice,
-      lastPrice: sgb.lastPrice,
+      askPrice: sgb.askPrice,
       maturityDate: sgb.maturityDate,
       yearsToMaturity: sgb.yearsToMaturity,
       interestPayable: sgb.interestPayable,
       presentValueDividend: presentValueDividend,
       fairValue: fairValue,
-      discount: fairValue / sgb.lastPrice - 1,
-      yield: (sgb.issuePrice * sgb.interestPayable) / sgb.lastPrice,
+      discount: fairValue / sgb.askPrice - 1,
+      discountCmp: info[0].goldPriceInr / sgb.askPrice - 1,
+      yield: (sgb.issuePrice * sgb.interestPayable) / sgb.askPrice,
     };
 
     data.push(sgbData);
@@ -163,17 +175,41 @@ updateData = async () => {
     const data = await Promise.all(
       sgbs.map(async (sgb) => {
         try {
-          const data = await nseIndia.getEquityDetails(sgb.symbol);
+          // const data = await nseIndia.getEquityDetails(sgb.symbol);
 
-          if (data) {
-            sgb.issuePrice = data.securityInfo.faceValue;
-            sgb.lastPrice = data.priceInfo.lastPrice;
+          const data = await NSEAPI.getQuoteInfo(sgb.symbol);
+
+          if (
+            data &&
+            data.data &&
+            data.data.data &&
+            data.data.data.length > 0 &&
+            data.data.data[0]
+          ) {
+            const priceData = data.data.data[0];
+
+            sgb.issuePrice = parseFloat(priceData.faceValue.replace(",", ""));
+            sgb.askPrice = isNaN(
+              parseFloat(priceData.sellPrice1.replace(",", ""))
+            )
+              ? parseFloat(priceData.lastPrice.replace(",", ""))
+              : parseFloat(priceData.sellPrice1.replace(",", ""));
+
+            sgb.tradedVolumeValue = isNaN(
+              parseFloat(priceData.totalTradedValue.replace(",", ""))
+            )
+              ? 0
+              : parseFloat(priceData.totalTradedValue.replace(",", ""));
+
+            sgb.isin = priceData.isinCode;
 
             // Calculate years to maturity
             const yearsToMaturity =
               (sgb.maturityDate - Date.now()) / (1000 * 60 * 60 * 24 * 365);
 
             sgb.yearsToMaturity = yearsToMaturity;
+
+            // console.log({ sgb });
 
             return sgb;
           } else {

@@ -4,8 +4,10 @@ const Schema = mongoose.Schema;
 // SGB Schema
 const sgb = new Schema({
   symbol: { type: String, required: true },
+  isin: { type: String },
   issuePrice: { type: Number },
-  lastPrice: { type: Number },
+  askPrice: { type: Number },
+  tradedVolumeValue: { type: Number },
   yearsToMaturity: { type: Number },
   maturityDate: { type: Date, default: Date.now },
   interestPayable: { type: Number, default: 2.5 },
