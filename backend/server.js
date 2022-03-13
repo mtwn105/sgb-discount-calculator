@@ -286,6 +286,8 @@ getSgbData = (sgbs, info) => {
       askPrice: sgb.askPrice,
       tradedVolumeValue: sgb.tradedVolumeValue,
       maturityDate: sgb.maturityDate,
+      interestDate1: sgb.interestDate1,
+      interestDate2: sgb.interestDate2,
       yearsToMaturity: sgb.yearsToMaturity,
       interestPayable: sgb.interestPayable,
       presentValueDividend: presentValueDividend,

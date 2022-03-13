@@ -10,6 +10,8 @@ const sgb = new Schema({
   tradedVolumeValue: { type: Number },
   yearsToMaturity: { type: Number },
   maturityDate: { type: Date, default: Date.now },
+  interestDate1: { type: Date, default: Date.now },
+  interestDate2: { type: Date, default: Date.now },
   interestPayable: { type: Number, default: 2.5 },
 });
 
