@@ -144,6 +144,10 @@ app.get("/api/sgbs/csv", async (req, res) => {
       value: "interestValue",
     },
     {
+      label: "No of Remaining Interest Payments",
+      value: "noOfFutureInterestPayments",
+    },
+    {
       label: "Total Remaining Interest",
       value: "totalRemainingInterest",
     },
@@ -233,6 +237,8 @@ app.listen(port, async () => {
 
 updateData = async () => {
   try {
+    console.log("Updating Data Started");
+
     const sgbs = await Sgb.find();
 
     // Fetch gold price from https://ibjarates.com/
@@ -244,7 +250,7 @@ updateData = async () => {
 
     const goldPriceInr = parseFloat(goldPriceText.replace(/,/g, ""));
 
-    console.log({ goldPriceInr });
+    // console.log({ goldPriceInr });
 
     let info = await Info.findOne();
 
@@ -314,30 +320,14 @@ updateData = async () => {
 
     await Sgb.bulkSave(data);
 
+    console.log("Updating Data Finished");
+
     return { info, data };
   } catch (err) {
     console.error(err);
     return null;
   }
 };
-
-cron.schedule(
-  "0 * * * *",
-  async () => {
-    console.log("Update data Job");
-
-    try {
-      const result = await updateData();
-      console.log(result);
-    } catch (err) {
-      console.error("Error while updating data", err);
-    }
-  },
-  {
-    scheduled: true,
-    timezone: "Asia/Kolkata",
-  }
-);
 
 getSgbData = (sgbs, info) => {
   let data = [];
@@ -347,12 +337,12 @@ getSgbData = (sgbs, info) => {
     const i = info[0].discountRate / 200;
     const n = Math.round(sgb.yearsToMaturity) * 2;
 
-    const presentValueDividend = ((c * (1 - (1 + i) ** -n)) / i) * (1 + i);
+    const presentValueDividend = (c * (1 - (1 + i) ** -n)) / i;
 
     const fairValue = presentValueDividend + info[0].goldPriceInr;
 
     const totalRemainingInterest =
-      (sgb.issuePrice * sgb.interestPayable * n) / 100;
+      (sgb.issuePrice * (sgb.interestPayable / 2) * n) / 100;
 
     // Format maturity date to string mm/dd/yyyy in IST time zone
     const maturityDateString = sgb.maturityDate.toLocaleDateString("en-US", {
@@ -405,7 +395,8 @@ getSgbData = (sgbs, info) => {
       interestDate2String,
       yearsToMaturity: sgb.yearsToMaturity,
       interestPayable: sgb.interestPayable,
-      interestValue: (sgb.issuePrice * sgb.interestPayable) / 100,
+      interestValue: (sgb.issuePrice * sgb.interestPayable) / 200,
+      noOfFutureInterestPayments: n,
       totalRemainingInterest,
       presentValueDividend: presentValueDividend,
       fairValue: fairValue,
@@ -421,3 +412,23 @@ getSgbData = (sgbs, info) => {
   }
   return data;
 };
+
+cron.schedule(
+  "0 * * * *",
+  async () => {
+    console.log("Update data Job");
+
+    try {
+      const result = await updateData();
+      console.log(result);
+    } catch (err) {
+      console.error("Error during updating data job", err);
+    }
+
+    console.log("Update data finished");
+  },
+  {
+    scheduled: true,
+    timezone: "Asia/Kolkata",
+  }
+);
