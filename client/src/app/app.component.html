@@ -264,6 +264,18 @@
   <mat-icon color="primary">info</mat-icon> SGB prices are fetched from NSE.
 </p>
 
+<p class="margin-left-1">
+  <mat-icon color="primary">info</mat-icon> For FAQs related to SGB visit
+  <a
+    (click)="
+      googleAnalyticsService.eventEmitter('rbiFaqLinkClick', 'interaction', '')
+    "
+    href="https://m.rbi.org.in/scripts/FAQView.aspx?Id=109"
+    target="_blank"
+    >https://m.rbi.org.in/scripts/FAQView.aspx?Id=109</a
+  >
+</p>
+
 <div class="footer">
   <p>
     Made with 💖 by
