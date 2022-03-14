@@ -49,10 +49,43 @@ app.get("/api/nse/:symbol", async (req, res) => {
 
   const data = await NSEAPI.getQuoteInfo(symbol);
 
-  console.log(data.data);
+  // console.log(data.data);
 
   res.send(data.data);
   // res.send("OK");
+});
+
+// Fetch data from NSE with only ask price
+app.get("/api/nse/:symbol/bidAskPrice", async (req, res) => {
+  const { symbol } = req.params;
+  // const data = await nseIndia.getEquityDetails(symbol);
+
+  const data = await NSEAPI.getQuoteInfo(symbol);
+
+  // console.log(data.data.data);
+
+  if (
+    data &&
+    data.data &&
+    data.data.data &&
+    data.data.data.length > 0 &&
+    data.data.data[0]
+  ) {
+    const priceData = data.data.data[0];
+
+    const askPrice = !isNaN(parseFloat(priceData.sellPrice1.replace(",", "")))
+      ? parseFloat(priceData.sellPrice1.replace(",", ""))
+      : parseFloat(priceData.lastPrice.replace(",", ""));
+
+    const bidPrice = !isNaN(parseFloat(priceData.buyPrice1.replace(",", "")))
+      ? parseFloat(priceData.buyPrice1.replace(",", ""))
+      : parseFloat(priceData.lastPrice.replace(",", ""));
+
+    return res.send(bidPrice + "," + askPrice);
+  }
+
+  // res.send(data.data);
+  res.send("NO DATA FOUND");
 });
 
 // Fetch data from MongoDB for SGB
