@@ -276,6 +276,18 @@
   >
 </p>
 
+<p class="margin-left-1">
+  <mat-icon color="primary">info</mat-icon> Contact me at
+  <a
+    (click)="
+      googleAnalyticsService.eventEmitter('contactLinkClick', 'interaction', '')
+    "
+    href="mailto:mtwn105@gmail.com"
+    target="_blank"
+    >mtwn105@gmail.com</a
+  >
+</p>
+
 <div class="footer">
   <p>
     Made with 💖 by
