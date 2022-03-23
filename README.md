@@ -2,6 +2,8 @@
 
 ## [Link](https://sgb.amitwani.dev)
 
+![sgb analyzer (1)](https://user-images.githubusercontent.com/12975481/159708194-4f3c8a1c-5dce-45b9-9f58-dda23f176d91.png)
+
 ## Comapre different SGBs listed on NSE
 
 ![image](https://user-images.githubusercontent.com/12975481/158005414-f83eeed0-df0a-45dc-b2ae-977f290e87b3.png)
