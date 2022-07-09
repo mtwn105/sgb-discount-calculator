@@ -8,6 +8,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { NavigationEnd, Router } from '@angular/router';
 import { formatNumber } from '@angular/common';
 declare let gtag: Function;
+declare let umami: any;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -63,12 +64,13 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.dataSource.sort = this.sort;
 
       this.googleAnalyticsService.eventEmitter("dataLoaded", "data", "");
-
+      umami.trackEvent('Data Loaded', 'data');
     })
   }
 
   filter(event: any) {
     this.googleAnalyticsService.eventEmitter("filterData", "interaction", "");
+    umami.trackEvent('Filter Data', 'interaction');
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
@@ -76,6 +78,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   toggleLiquidity(event: any) {
 
     this.googleAnalyticsService.eventEmitter("toggleLiquidity", "interaction", "");
+    umami.trackEvent('Toggle Liquidity', 'interaction');
 
     if (event.checked) {
 
@@ -96,6 +99,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   downloadCsv() {
     this.sgbService.getSgbDataCsv().subscribe((data: any) => {
       this.googleAnalyticsService.eventEmitter("downloadCsv", "interaction", "");
+      umami.trackEvent('Download CSV', 'interaction');
       // File name will be sgb_YYYY-MM-DD.csv
       const fileName = `sgb_${new Date().toISOString().split('T')[0]}.csv`;
 
@@ -120,10 +124,16 @@ export class AppComponent implements OnInit, AfterViewInit {
     form.appendChild(node);
     form.addEventListener("click", () => {
       this.googleAnalyticsService.eventEmitter("paymentButtonClick", "interaction", "");
+      umami.trackEvent('Payment Button Click', 'interaction');
     })
 
     document.getElementsByClassName('payment')[0].appendChild(form);
 
+  }
+
+  feedback() {
+    this.googleAnalyticsService.eventEmitter("giveFeedback", "interaction", "");
+    umami.trackEvent('Give Feedback', 'interaction');
   }
 
 }
